@@ -1,17 +1,29 @@
-# Classes for working with project's database
+# Module for working with project's database
+import win32com.client
 
 
-class Abonent:
+class DataBase:
+    def __init__(self, path):
+        self.path = path
+        self.connection = win32com.client.Dispatch('ADODB.Connection')
+        self.cmd = win32com.client.Dispatch('ADODB.Command')
 
-    def __init__(self, symbname):
-        self.symbname = symbname
-        self.dgo = []
+    def open(self):
+        path = self.path + '\\Data'
+        dsn = 'Provider=VFPOLEDB.1;Data Source={}'.format(path)
+        self.connection.Open(dsn)
 
-    class Dgo:
-        def __init__(self, symbname, algname):
-            self.symbname = symbname
-            self.algname = algname
+    def read(self):
+        self.cmd.ActiveConnection = self._connection
+#        cmd.CommandText = "SELECT name, algname, usotype FROM tbDigOutParam;"
+        self.cmd.CommandText = "SELECT * FROM tbUSOType;"
 
-    def dgo_add(self, symbname, algname):
-        _dgo = self.Dgo(symbname, algname)
-        self.dgo.append(_dgo)
+        rs, total = self.cmd.Execute()
+
+        while total:
+            for x in range(rs.Fields.Count):
+                print('{} --> {}'.format(rs.Fields.item(x).Name,
+                                         rs.Fields.item(x).Value))
+            rs.MoveNext()
+            total = total - 1
+            print('=' * 80)
