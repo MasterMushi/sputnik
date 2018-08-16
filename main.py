@@ -1,4 +1,4 @@
-import database
+from database import DataBase
 import code
 
 # from PyQt5.QtWidgets import QApplication, QDialog
@@ -11,8 +11,9 @@ import code
 # window.show()
 # sys.exit(app.exec_())
 
-abonent = database.Abonent('ЗРУ')
-abonent.dgo_add('Наименование 1', 'alg_name1')
-abonent.dgo_add('Наименование 2', 'alg_name2')
+db = DataBase("D:\py\Database")
+db.open()
+db.read()
+db.close()
 
-code.create(abonent.dgo)
+#code.create(abonent.dgo)
